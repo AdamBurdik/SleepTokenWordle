@@ -1,0 +1,10 @@
+name: SleepTokenWordle
+version: '${version}'
+
+main: me.adamix.SleepTokenWordle
+api-version: '26.2'
+load: POSTWORLD
+
+author: Adam Burdík
+description: Minecraft wordle plugin but every word is sleep token song
+website: https://github.com/AdamBurdik/SleepTokenWordle
