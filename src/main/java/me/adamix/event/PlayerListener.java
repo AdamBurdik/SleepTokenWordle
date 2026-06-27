@@ -2,6 +2,8 @@ package me.adamix.event;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.adamix.GameService;
+import me.adamix.config.MessageService;
+import me.adamix.config.PluginMessages;
 import me.adamix.game.GuessResult;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.event.EventHandler;
@@ -14,9 +16,14 @@ import java.util.UUID;
 
 public class PlayerListener implements Listener {
     private final GameService gameService;
+    private final MessageService<PluginMessages> messageService;
 
-    public PlayerListener(@NotNull GameService gameService) {
+    public PlayerListener(
+            @NotNull GameService gameService,
+            @NotNull MessageService<PluginMessages> messageService
+    ) {
         this.gameService = gameService;
+        this.messageService = messageService;
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -32,23 +39,23 @@ public class PlayerListener implements Listener {
         String message = PlainTextComponentSerializer.plainText()
                 .serialize(event.message());
 
+        PluginMessages messages = messageService.get();
+
         gameService.guessWord(uuid, message.toLowerCase()).thenAccept(result -> {
             switch (result) {
                 case GuessResult.InvalidLength(int expectedLength) -> event.getPlayer()
-                        .sendMessage("The word must be exactly %d characters long!".formatted(expectedLength));
+                        .sendMessage(messages.invalidLength(expectedLength));
                 case GuessResult.InvalidInput() -> event.getPlayer()
-                        .sendMessage("Your guess is invalid! Please use only alphabetic characters");
-                case GuessResult.Success() -> {
-                }
+                        .sendMessage(messages.invalidInput());
                 case GuessResult.WordGuessed(int tries) -> event.getPlayer()
-                        .sendMessage("You have successfully guessed the word after %d attempts!".formatted(tries));
+                        .sendMessage(messages.wordGuessed(tries));
                 case GuessResult.Lost(String word) -> event.getPlayer()
-                        .sendMessage("You have ran out of attempts! The word was " + word);
+                        .sendMessage(messages.gameLost(word));
+                case GuessResult.UnknownWord() -> event.getPlayer()
+                        .sendMessage(messages.unknownWord());
+
+                case GuessResult.Success() -> {}
                 case GuessResult.OnDelay onDelay -> {}
-                case GuessResult.UnknownWord() -> {
-                    event.getPlayer()
-                        .sendMessage("Unknown word! Please enter valid sleep token song");
-                }
             }
         });
     }

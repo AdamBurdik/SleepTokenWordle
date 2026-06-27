@@ -1,0 +1,12 @@
+only_players_can_start_wordle: "<red>Only players can start wordle!"
+wordle_start: "<green>Wordle started!"
+interaction_mode: |
+    <dark_gray>-----------------------------------------
+    <yellow>You have entered interactive chat mode
+    All messages will be used as worldle guesses
+    <dark_gray>-----------------------------------------
+invalid_length: "<red>The word must be exactly <white><expected_length></white> characters long!"
+invalid_input: "<red>Your guess is invalid! Please use only alphabetic characters."
+word_guessed: "<green>You have successfully guessed the word after <gold><tries></gold> attempts!"
+game_lost: "<red>You have run out of attempts! The word was <gold><word></gold>."
+unknown_word: "<red>Unknown word! Please enter a valid Sleep Token song."

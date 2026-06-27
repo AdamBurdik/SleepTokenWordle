@@ -11,10 +11,15 @@ repositories {
 
 dependencies {
     compileOnly(libs.paper.api)
+    implementation("net.kyori:adventure-text-minimessage:5.1.1")
 }
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(25)
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("-parameters")
 }
 
 tasks {
